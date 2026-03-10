@@ -69,7 +69,8 @@ server.setRequestHandler(ListToolsRequestSchema, async () => {
             title: { type: "string" },
             priority: { type: "string", enum: ["low", "medium", "high", "urgent"] },
             due_date: { type: "string", description: "YYYY-MM-DD" },
-            recurrence: { type: "string", enum: ["none", "daily", "weekly", "monthly"] }
+            recurrence: { type: "string", enum: ["none", "daily", "weekly", "monthly"] },
+            tags: { type: "array", items: { type: "integer" }, description: "如果你需要覆盖绑定新的标签，请传入标签 ID 数组。不传则保留原有标签。" }
           },
           required: ["task_id"]
         }
@@ -132,6 +133,7 @@ server.setRequestHandler(CallToolRequestSchema, async (request) => {
       if (args.priority) payload.priority = args.priority;
       if (args.due_date) payload.due_date = args.due_date;
       if (args.recurrence) payload.recurrence = args.recurrence;
+      if (args.tags) payload.tags = args.tags;
 
       if (Object.keys(payload).length === 0) {
         throw new Error("No fields provided to update");

@@ -60,8 +60,9 @@ def create_task(title: str, priority: str = 'medium', due_date: Optional[str] = 
         return json.dumps({"error": str(e)})
 
 def update_task(task_id: int, title: Optional[str] = None, priority: Optional[str] = None, 
-                due_date: Optional[str] = None, recurrence: Optional[str] = None) -> str:
-    """更新已有任务的基本信息（标题、优先级、截止日期等）。如果要更新状态或子任务，推荐使用 add_task_progress_note。"""
+                due_date: Optional[str] = None, recurrence: Optional[str] = None,
+                tags: Optional[List[int]] = None) -> str:
+    """更新已有任务的基本信息（标题、优先级、截止日期、标签等）。如果要更新状态或子任务，推荐使用 add_task_progress_note。"""
     payload: Dict[str, Any] = {}
     if title is not None:
         payload["title"] = title
@@ -71,6 +72,8 @@ def update_task(task_id: int, title: Optional[str] = None, priority: Optional[st
         payload["due_date"] = due_date
     if recurrence is not None:
         payload["recurrence"] = recurrence
+    if tags is not None:
+        payload["tags"] = tags
 
     if not payload:
         return json.dumps({"error": "No fields to update provided."})
@@ -176,7 +179,12 @@ OPENCLAW_TOOLS_SCHEMA = [
                     "title": {"type": "string", "description": "新的标题名称"},
                     "priority": {"type": "string", "enum": ["low", "medium", "high", "urgent"]},
                     "due_date": {"type": "string", "description": "新的截止日期，格式 YYYY-MM-DD"},
-                    "recurrence": {"type": "string", "enum": ["none", "daily", "weekly", "monthly"]}
+                    "recurrence": {"type": "string", "enum": ["none", "daily", "weekly", "monthly"]},
+                    "tags": {
+                        "type": "array",
+                        "items": {"type": "integer"},
+                        "description": "需要重新绑定的新标签ID数组。如果你不想修改已有标签，请不要提供此参数。"
+                    }
                 },
                 "required": ["task_id"]
             }
