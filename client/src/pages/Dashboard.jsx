@@ -6,6 +6,7 @@ import TaskForm from '../components/TaskForm';
 import FilterBar from '../components/FilterBar';
 import TagManager from '../components/TagManager';
 import KanbanBoard from '../components/KanbanBoard';
+import CalendarBoard from '../components/CalendarBoard';
 
 export default function Dashboard() {
   const [filters, setFilters] = useState({ sort: 'created_at', order: 'desc', page: 1, limit: 20 });
@@ -26,10 +27,10 @@ export default function Dashboard() {
 
   const toggleTheme = () => setTheme((t) => (t === 'dark' ? 'light' : 'dark'));
 
-  // For kanban view, fetch more tasks with no status filter
+  // For kanban and calendar view, fetch more tasks with no status filter
   const kanbanFilters = { ...filters, limit: 100, status: '' };
   const { tasks: kanbanTasks, loading: kanbanLoading, refetch: kanbanRefetch } = useTasks(
-    viewMode === 'kanban' ? kanbanFilters : null
+    viewMode === 'kanban' || viewMode === 'calendar' ? kanbanFilters : null
   );
 
   const handleCreateOrUpdate = async (data) => {
@@ -42,7 +43,7 @@ export default function Dashboard() {
       setShowForm(false);
       setEditingTask(null);
       refetch();
-      if (viewMode === 'kanban') kanbanRefetch();
+      if (viewMode === 'kanban' || viewMode === 'calendar') kanbanRefetch();
       refetchTags();
     } catch (err) {
       alert(err.message);
@@ -58,7 +59,7 @@ export default function Dashboard() {
     try {
       await tasksApi.update(id, { status });
       refetch();
-      if (viewMode === 'kanban') kanbanRefetch();
+      if (viewMode === 'kanban' || viewMode === 'calendar') kanbanRefetch();
     } catch (err) {
       alert(err.message);
     }
@@ -77,7 +78,7 @@ export default function Dashboard() {
       await tasksApi.batch({ action, ids: selectedIds, value });
       setSelectedIds([]);
       refetch();
-      if (viewMode === 'kanban') kanbanRefetch();
+      if (viewMode === 'kanban' || viewMode === 'calendar') kanbanRefetch();
       refetchTags();
     } catch (err) {
       alert(err.message);
@@ -90,14 +91,14 @@ export default function Dashboard() {
     setFilters((prev) => ({ ...prev, page }));
   };
 
-  // Summary counts (use kanban tasks when in kanban mode for accurate totals)
-  const activeTasks = viewMode === 'kanban' ? kanbanTasks : tasks;
+  // Summary counts (use kanban tasks when in kanban or calendar mode for accurate totals)
+  const activeTasks = (viewMode === 'kanban' || viewMode === 'calendar') ? kanbanTasks : tasks;
   const todoCnt = activeTasks.filter((t) => t.status === 'todo').length;
   const inProgressCnt = activeTasks.filter((t) => t.status === 'in_progress').length;
   const doneCnt = activeTasks.filter((t) => t.status === 'done').length;
 
   return (
-    <div className={`dashboard ${viewMode === 'kanban' ? 'kanban-mode' : ''}`}>
+    <div className={`dashboard ${viewMode === 'kanban' || viewMode === 'calendar' ? 'kanban-mode' : ''}`}>
       {/* Sidebar — hidden in kanban mode via CSS */}
       <aside className="sidebar">
         <div className="sidebar-header">
@@ -150,8 +151,8 @@ export default function Dashboard() {
       {/* Main Content */}
       <main className="main-content">
         <div className="main-header">
-          {/* Brand inline — only shows in kanban mode */}
-          {viewMode === 'kanban' && (
+          {/* Brand inline — only shows in full screen mode */}
+          {(viewMode === 'kanban' || viewMode === 'calendar') && (
             <div className="header-brand">
               <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="brand-icon">
                 <path d="M9 11l3 3L22 4" />
@@ -195,6 +196,18 @@ export default function Dashboard() {
                   <rect x="1" y="1" width="3.5" height="14" rx="1" />
                   <rect x="6.25" y="1" width="3.5" height="10" rx="1" />
                   <rect x="11.5" y="1" width="3.5" height="7" rx="1" />
+                </svg>
+              </button>
+              <button
+                className={`view-toggle-btn ${viewMode === 'calendar' ? 'active' : ''}`}
+                onClick={() => setViewMode('calendar')}
+                title="日历视图"
+              >
+                <svg width="16" height="16" viewBox="0 0 16 16" fill="none" stroke="currentColor" strokeWidth="1.5">
+                  <rect x="2" y="3" width="12" height="11" rx="1" />
+                  <line x1="2" y1="7" x2="14" y2="7" />
+                  <line x1="5" y1="1" x2="5" y2="4" />
+                  <line x1="11" y1="1" x2="11" y2="4" />
                 </svg>
               </button>
             </div>
@@ -277,7 +290,7 @@ export default function Dashboard() {
               </div>
             )}
           </>
-        ) : (
+        ) : viewMode === 'kanban' ? (
           <div className="kanban-wrapper">
             {kanbanLoading && kanbanTasks.length === 0 ? (
               <div className="loading-state">
@@ -291,6 +304,20 @@ export default function Dashboard() {
                 onStatusChange={handleStatusChange}
                 onSelect={handleSelect}
                 selectedIds={selectedIds}
+              />
+            )}
+          </div>
+        ) : (
+          <div className="kanban-wrapper">
+            {kanbanLoading && kanbanTasks.length === 0 ? (
+              <div className="loading-state">
+                <div className="spinner"></div>
+                <p>加载中...</p>
+              </div>
+            ) : (
+              <CalendarBoard
+                tasks={kanbanTasks}
+                onEdit={handleEdit}
               />
             )}
           </div>
