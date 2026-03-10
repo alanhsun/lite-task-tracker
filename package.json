@@ -1,7 +1,7 @@
 {
-  "name": "lite-task-tracker",
+  "name": "agenttodo",
   "version": "1.0.0",
-  "description": "轻量级任务追踪系统 - Lightweight Task Tracker",
+  "description": "AI 驱动的极简本地任务系统 - AgentTODO",
   "private": true,
   "workspaces": [
     "server",

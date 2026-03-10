@@ -1,6 +1,10 @@
-# 🚀 Lite Task Tracker
+# 🚀 AgentTODO
 
-**Lite Task Tracker** 是一个专为 AI 助手（如 OpenClaw、ChatGPT、Coze 等）设计的轻量级、本地化任务管理中枢。它不仅提供了一个现代化的响应式 Web UI（看板 + 列表视图），还专门暴露了一套**无需认证**、**结构精简**的 API，让你的私人 AI 助理随时充当你的“执行力教练”。
+<p align="center">
+  <img src="https://raw.githubusercontent.com/alanhsun/lite-task-tracker/main/docs/assets/agenttodo_logo.png" alt="AgentTODO Logo" width="200" style="border-radius:20px; box-shadow: 0 4px 15px rgba(0,0,0,0.5)">
+</p>
+
+**AgentTODO** 是一个专为 AI 助手（如 OpenClaw、ChatGPT、Coze 等）设计的轻量级、本地化任务管理中枢。它不仅提供了一个现代化的响应式 Web UI（看板 + 列表视图），还专门暴露了一套**无需认证**、**结构精简**的 API，让你的私人 AI 助理随时充当你的“执行力教练”。
 
 ---
 
@@ -24,9 +28,9 @@
 
 ```yaml
 services:
-  lite-task-tracker:
-    image: alansundy/lite-task-tracker:latest
-    container_name: lite-task-tracker
+  agenttodo:
+    image: alansundy/agenttodo:latest
+    container_name: agenttodo
     restart: unless-stopped
     ports:
       - "3300:3300"

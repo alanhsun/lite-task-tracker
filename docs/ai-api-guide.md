@@ -1,6 +1,6 @@
-# Task Tracker API — AI Agent 接口规范
+# AgentTODO API — AI Agent 接口规范
 
-> 本文档专门为 AI Agent / LLM 工具调用 Task Tracker API 而编写。
+> 本文档专门为 AI Agent / LLM 工具调用 AgentTODO API 而编写。
 > 无需认证，所有端点均可直接调用。
 
 ## 连接信息
