@@ -1,0 +1,17 @@
+{
+  "name": "task-manager",
+  "version": "1.0.0",
+  "description": "轻量级任务追踪系统 - Lightweight Task Tracker",
+  "private": true,
+  "workspaces": [
+    "server",
+    "client"
+  ],
+  "scripts": {
+    "dev": "cd server && npm run dev",
+    "start": "cd server && npm start",
+    "build:client": "cd client && npm run build",
+    "test": "cd server && npm test",
+    "test:coverage": "cd server && npm run test:coverage"
+  }
+}
