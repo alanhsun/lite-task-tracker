@@ -20,7 +20,7 @@ function formatDate(dateStr) {
 
 const RECURRENCE_LABELS = { daily: '每天', weekly: '每周', monthly: '每月' };
 
-export default function TaskCard({ task, onEdit, onStatusChange, onSelect, selected }) {
+export default function TaskCard({ task, onEdit, onStatusChange, onSelect, selected, draggable, onDragStart }) {
   const dateInfo = formatDate(task.due_date);
 
   const handleStatusClick = (e) => {
@@ -37,6 +37,8 @@ export default function TaskCard({ task, onEdit, onStatusChange, onSelect, selec
     <div
       className={`task-card priority-${task.priority} ${task.status === 'done' ? 'completed' : ''} ${selected ? 'selected' : ''}`}
       onClick={() => onEdit(task)}
+      draggable={draggable}
+      onDragStart={onDragStart}
     >
       <div className="task-card-header">
         <button className="status-toggle" onClick={handleStatusClick} title={`切换状态: ${STATUS_LABELS[task.status]}`}>

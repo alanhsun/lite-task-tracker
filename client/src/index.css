@@ -686,10 +686,26 @@ textarea { resize: vertical; min-height: 80px; }
   flex: 1;
   overflow-y: auto;
   padding: 10px;
+  transition: background-color 0.2s ease;
+}
+
+.kanban-column-body.drag-over {
+  background: var(--bg-hover);
+  border-radius: var(--radius-lg);
+  outline: 2px dashed var(--accent);
+  outline-offset: -2px;
 }
 
 .kanban-column-body .task-card {
   margin-bottom: 10px;
+}
+
+.task-card[draggable="true"] {
+  cursor: grab;
+}
+
+.task-card[draggable="true"]:active {
+  cursor: grabbing;
 }
 
 .kanban-column-body .task-card:last-child {
