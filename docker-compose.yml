@@ -1,8 +1,8 @@
 services:
-  task-manager:
+  lite-task-tracker:
     image: alansundy/task-manager:latest
     build: .
-    container_name: task-manager
+    container_name: lite-task-tracker
     restart: unless-stopped
     ports:
       - "3300:3300"

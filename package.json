@@ -1,5 +1,5 @@
 {
-  "name": "task-manager",
+  "name": "lite-task-tracker",
   "version": "1.0.0",
   "description": "轻量级任务追踪系统 - Lightweight Task Tracker",
   "private": true,
